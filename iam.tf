@@ -1,7 +1,7 @@
 resource "aws_cloudwatch_log_group" "this" {
   count = length(var.lambdas)
 
-  name = "/aws/lambda/${var.lambdas[count.index].name}"
+  name              = "/aws/lambda/${var.lambdas[count.index].name}"
   retention_in_days = 30
 }
 
@@ -17,8 +17,7 @@ resource "aws_iam_role" "lambda_exec" {
       Principal = {
         Service = "lambda.amazonaws.com"
       }
-      }
-    ]
+    }]
   })
 }
 
