@@ -1,2 +1,2 @@
-# rest-api-terraform
-SOA and Cloud Computing -course Demo 6
+# REST API Gateway on AWS
+SOA and Cloud Computing -course Demo6 created with Terraform.
