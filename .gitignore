@@ -30,3 +30,6 @@ override.tf.json
 
 # Remove zipped lambdas
 *.zip
+
+# Python stuff
+__pycache__
