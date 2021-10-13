@@ -10,12 +10,14 @@ resource "aws_s3_bucket" "lambda_bucket" {
   force_destroy = true
 }
 
-data "archive_file" "this" {
-  count = length(var.lambdas)
+module "archive" {
+  count  = length(var.lambdas)
+  source = "./modules/archive"
 
-  type        = "zip"
-  source_file = "${path.module}/${var.source_path}/${var.lambdas[count.index].filename}.py"
-  output_path = "${path.module}/${var.source_path}/${var.lambdas[count.index].filename}.zip"
+  source_dir  = var.source_path
+  main_file   = var.lambdas[count.index].filename
+  import_file = "responses"
+  name        = var.lambdas[count.index].filename
 }
 
 resource "aws_s3_bucket_object" "lambda_root" {
@@ -23,8 +25,8 @@ resource "aws_s3_bucket_object" "lambda_root" {
 
   bucket = aws_s3_bucket.lambda_bucket.id
   key    = "${var.lambdas[count.index].filename}.zip"
-  source = data.archive_file.this[count.index].output_path
-  etag   = filemd5(data.archive_file.this[count.index].output_path)
+  source = module.archive[count.index].output_path
+  etag   = filemd5(module.archive[count.index].output_path)
 }
 
 resource "aws_lambda_function" "this" {
@@ -37,7 +39,7 @@ resource "aws_lambda_function" "this" {
   runtime = "python3.9"
   handler = "${var.lambdas[count.index].filename}.lambda_handler"
 
-  source_code_hash = data.archive_file.this[count.index].output_base64sha256
+  source_code_hash = module.archive[count.index].hash
 
   role = aws_iam_role.lambda_exec.arn
 }
