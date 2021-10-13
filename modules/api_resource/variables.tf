@@ -8,17 +8,12 @@ variable "parent_resource_id" {
   type        = string
 }
 
-variable "lambda_arn" {
-  description = "Lambda function ARN."
-  type        = string
+variable "methods" {
+  description = "Method type and lambda ARN in a map: {method = <method>, lambda = <lambda_arn>}."
+  type        = list(map(string))
 }
 
 variable "endpoint" {
   description = "Path ending for the resource."
-  type        = string
-}
-
-variable "http_method" {
-  description = "HTTP method used with this combination."
   type        = string
 }

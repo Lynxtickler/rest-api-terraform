@@ -2,4 +2,4 @@ import responses
 
 
 def lambda_handler(event, context):
-    return responses.get_all()
+    return responses.create_item(event['body'])

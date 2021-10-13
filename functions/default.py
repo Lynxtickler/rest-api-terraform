@@ -1,5 +1,4 @@
-import json
-import boto3
+import responses
 
 def lambda_handler(event, context):
-    return "404"
+    return responses.create_error(404, 'Bad request.')

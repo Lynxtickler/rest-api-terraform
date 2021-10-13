@@ -15,6 +15,22 @@ variable "lambdas" {
     {
       name     = "root-get",
       filename = "root-get"
+    },
+    {
+      name     = "root-post",
+      filename = "root-post"
+    },
+    {
+      name     = "root-put",
+      filename = "root-put"
+    },
+    {
+      name     = "root-delete",
+      filename = "root-delete"
+    },
+    {
+      name     = "update-daily",
+      filename = "update-daily"
     }
   ]
 }
