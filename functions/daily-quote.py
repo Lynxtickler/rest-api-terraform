@@ -1,5 +1,5 @@
-#import responses
-import requests
+import responses
+import urllib3
 import xml.etree.ElementTree as ET
 
 
@@ -10,11 +10,8 @@ def lambda_handler(event, context):
 
 
 def read_quote_rss(feed_url):
-    xml_response = requests.get(feed_url)
-    root = ET.fromstring(xml_response.content)
+    http = urllib3.PoolManager()
+    xml_response = http.request('GET', feed_url).data
+    root = ET.fromstring(xml_response)
     quote = root[0].find('item')
     return {'Author': quote.find('title').text, 'Text': quote.find('description').text}
-
-
-if __name__ == '__main__':
-    lambda_handler(None, None)

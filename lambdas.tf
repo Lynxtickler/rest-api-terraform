@@ -22,3 +22,15 @@ module "api_lambda" {
   execution_role_arn = aws_iam_role.lambda_exec.arn
   api_execution_arns = [aws_api_gateway_rest_api.this.execution_arn]
 }
+
+module "timer_lambda" {
+  source = "./modules/lambda"
+
+  name                      = "daily-quote"
+  source_path               = var.source_path
+  filename                  = "daily-quote"
+  import_file               = var.import_file
+  bucket_id                 = aws_s3_bucket.lambda_bucket.id
+  execution_role_arn        = aws_iam_role.lambda_exec.arn
+  event_rule_execution_arns = [aws_cloudwatch_event_rule.this.arn]
+}

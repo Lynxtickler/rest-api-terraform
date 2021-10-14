@@ -31,10 +31,6 @@ variable "lambdas" {
     {
       name     = "quote-delete",
       filename = "quote-delete"
-    },
-    {
-      name     = "daily-quote",
-      filename = "daily-quote"
     }
   ]
 }

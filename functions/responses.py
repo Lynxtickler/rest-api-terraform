@@ -59,7 +59,10 @@ def create_item(item):
 def update_item(item_id, item, called_by_daily=False):
     if ((item_id == DAILY_RESOURCE_NAME) and (not called_by_daily)):
         return create_error(409, 'Resource is reserved.')
-    item_json = json.loads(item)
+    if isinstance(item, dict):
+        item_json = item
+    else:
+        item_json = json.loads(item)
     item_json['ID'] = item_id
     table.put_item(Item=item_json)
     return response(code=201, body={'message': 'Resource updated successfully.'})

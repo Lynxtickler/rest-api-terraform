@@ -37,3 +37,14 @@ resource "aws_lambda_permission" "this" {
 
   source_arn = "${var.api_execution_arns[count.index]}/*/*"
 }
+
+resource "aws_lambda_permission" "timer" {
+  count = length(var.event_rule_execution_arns)
+
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.this.function_name
+  principal     = "events.amazonaws.com"
+
+  source_arn = var.event_rule_execution_arns[count.index]
+}

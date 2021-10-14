@@ -31,4 +31,11 @@ variable "execution_role_arn" {
 variable "api_execution_arns" {
   description = "ARNs of the API Gateways that should be able to invoke this lambda, if any."
   type        = list(string)
+  default     = []
+}
+
+variable "event_rule_execution_arns" {
+  description = "ARNs of the CloudWatch Events that should be able to invoke this lambda, if any."
+  type        = list(string)
+  default     = []
 }

@@ -32,13 +32,3 @@ resource "aws_api_gateway_method_response" "this" {
   http_method = aws_api_gateway_method.this[count.index].http_method
   status_code = var.methods[count.index].code
 }
-
-#resource "aws_api_gateway_integration_response" "this" {
-#  count = length(var.methods)
-#
-#  rest_api_id      = var.rest_api_id
-#  resource_id      = aws_api_gateway_resource.this.id
-#  http_method      = aws_api_gateway_method.this[count.index].http_method
-#  status_code      = aws_api_gateway_method_response.this[count.index].status_code
-#  content_handling = "CONVERT_TO_TEXT"
-#}
