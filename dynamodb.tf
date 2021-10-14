@@ -7,6 +7,6 @@ resource "aws_dynamodb_table" "this" {
 
   attribute {
     name = "ID"
-    type = "N"
+    type = "S"
   }
 }

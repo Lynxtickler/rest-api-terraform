@@ -12,11 +12,13 @@ module "quotes_root" {
   methods = [
     {
       method = "GET",
-      lambda = aws_lambda_function.this[1].invoke_arn
+      lambda = module.api_lambda[1].invoke_arn,
+      code   = 200
     },
     {
       method = "POST",
-      lambda = aws_lambda_function.this[2].invoke_arn
+      lambda = module.api_lambda[2].invoke_arn,
+      code   = 201
     }
   ]
 }
@@ -29,12 +31,19 @@ module "quotes_sub" {
   endpoint           = "{id}"
   methods = [
     {
+      method = "GET",
+      lambda = module.api_lambda[3].invoke_arn,
+      code   = 200
+    },
+    {
       method = "PUT",
-      lambda = aws_lambda_function.this[3].invoke_arn
+      lambda = module.api_lambda[4].invoke_arn,
+      code   = 201
     },
     {
       method = "DELETE",
-      lambda = aws_lambda_function.this[4].invoke_arn
+      lambda = module.api_lambda[5].invoke_arn,
+      code   = 200
     }
   ]
 }

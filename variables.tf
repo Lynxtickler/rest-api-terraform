@@ -10,7 +10,7 @@ variable "lambdas" {
   default = [
     {
       name     = "default",
-      filename = "default"
+      filename = "default",
     },
     {
       name     = "root-get",
@@ -21,16 +21,26 @@ variable "lambdas" {
       filename = "root-post"
     },
     {
-      name     = "root-put",
-      filename = "root-put"
+      name     = "quote-get",
+      filename = "quote-get"
     },
     {
-      name     = "root-delete",
-      filename = "root-delete"
+      name     = "quote-put",
+      filename = "quote-put"
     },
     {
-      name     = "update-daily",
-      filename = "update-daily"
+      name     = "quote-delete",
+      filename = "quote-delete"
+    },
+    {
+      name     = "daily-quote",
+      filename = "daily-quote"
     }
   ]
+}
+
+variable "import_file" {
+  description = "Import file with generic code."
+  type        = string
+  default     = "responses"
 }
