@@ -69,6 +69,8 @@ def update_item(item_id, item, called_by_daily=False):
 
 
 def delete_item(item_id):
+    if item_id == DAILY_RESOURCE_NAME:
+        return create_error(400, 'Cannot delete daily quote.')
     try:
         table.delete_item(Key={'ID': item_id})
     except:
