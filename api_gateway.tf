@@ -1,3 +1,7 @@
+locals {
+  deployment_count = var.deploy_api ? 1 : 0
+}
+
 resource "aws_api_gateway_rest_api" "this" {
   description = "Proxy to handle requests to our API"
   name        = "rest_gateway"
@@ -46,4 +50,26 @@ module "quotes_sub" {
       code   = 200
     }
   ]
+}
+
+resource "aws_api_gateway_deployment" "this" {
+  count = local.deployment_count
+
+  rest_api_id = aws_api_gateway_rest_api.this.id
+
+  triggers = {
+    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.this.body))
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_api_gateway_stage" "this" {
+  count = local.deployment_count
+
+  deployment_id = aws_api_gateway_deployment.this[count.index].id
+  rest_api_id   = aws_api_gateway_rest_api.this.id
+  stage_name    = terraform.workspace
 }

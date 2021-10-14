@@ -44,3 +44,9 @@ variable "import_file" {
   type        = string
   default     = "responses"
 }
+
+variable "deploy_api" {
+  description = "Whether to create REST API deployment or not"
+  type        = bool
+  default     = true
+}
