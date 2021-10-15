@@ -14,13 +14,13 @@ def response(code=200, headers=None, body='', encode=False):
     if not headers:
         headers = {'Content-Type': 'application/json'}
         # 'Access-Control-Allow-Origin': '*'
-    if isinstance(body, dict):
+    if isinstance(body, dict) or isinstance(body, list):
         body = json.dumps(body)
     return {
         'statusCode': code,
         'headers': headers,
         'body': body,
-        "isBase64Encoded": encode
+        'isBase64Encoded': encode
     }
 
 

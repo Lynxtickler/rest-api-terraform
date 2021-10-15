@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_event_rule" "this" {
   name                = "run-daily"
-  schedule_expression = "rate(1 day)"
+  schedule_expression = "cron(0 6 ? * * *)"
 }
 
 resource "aws_cloudwatch_event_target" "this" {
