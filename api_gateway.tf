@@ -52,6 +52,21 @@ module "quotes_sub" {
   ]
 }
 
+module "any" {
+  source = "./modules/api_resource"
+
+  rest_api_id        = aws_api_gateway_rest_api.this.id
+  parent_resource_id = aws_api_gateway_rest_api.this.root_resource_id
+  endpoint           = "{proxy+}"
+  methods = [
+    {
+      method = "ANY",
+      lambda = module.api_lambda[0].invoke_arn,
+      code   = 404
+    }
+  ]
+}
+
 resource "aws_api_gateway_deployment" "this" {
   count = local.deployment_count
 
