@@ -14,4 +14,5 @@ def read_quote_rss(feed_url):
     xml_response = http.request('GET', feed_url).data
     root = ET.fromstring(xml_response)
     quote = root[0].find('item')
-    return {'Author': quote.find('title').text, 'Text': quote.find('description').text}
+    quote_text = quote.find('description').text.lstrip('"').rstrip('"')
+    return {'Author': quote.find('title').text, 'Text': quote_text}
