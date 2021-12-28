@@ -38,7 +38,7 @@ variable "lambdas" {
 variable "import_file" {
   description = "Import file with generic code."
   type        = string
-  default     = "responses"
+  default     = "shared"
 }
 
 variable "deploy_api" {
