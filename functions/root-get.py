@@ -1,5 +1,6 @@
-import responses
+import shared
 
 
 def lambda_handler(event, context):
-    return responses.get_all()
+    items = shared.table.scan()['Items']
+    return shared.response(code=200, body=str(items))

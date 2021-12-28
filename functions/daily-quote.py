@@ -1,4 +1,4 @@
-import responses
+import shared
 import urllib3
 import xml.etree.ElementTree as ET
 
@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 def lambda_handler(event, context):
     rss_feed = 'https://www.brainyquote.com/link/quotebr.rss'
     quote = read_quote_rss(rss_feed)
-    return responses.update_item('daily', quote, called_by_daily=True)
+    return shared.update_item('daily', quote, called_by_daily=True)
 
 
 def read_quote_rss(feed_url):

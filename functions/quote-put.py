@@ -1,5 +1,5 @@
-import responses
+import shared
 
 
 def lambda_handler(event, context):
-    return responses.update_item(event['pathParameters']['id'], event['body'])
+    return shared.update_item(event['pathParameters']['id'], event['body'])

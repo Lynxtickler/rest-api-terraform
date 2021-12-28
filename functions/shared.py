@@ -28,32 +28,9 @@ def create_error(code=400, message='Something went wrong.'):
     return response(code, body={'code': code, "message": message})
 
 
-def get_all():
-    items = table.scan()['Items']
-    return response(code=200, body=str(items))
-
-
-def get_one_item(item_id):
-    try:
-        item = table.get_item(Key={'ID': item_id})['Item']
-    except:
-        item = None
-    if item:
-        return response(code=200, body=item)
-    return create_error(404, 'No such resource.')
-
-
 def check_item_exists(item_id):
     db_response = table.get_item(Key={'ID': item_id})
     return ('Item' in db_response.keys())
-
-
-def create_item(item):
-    item_json = json.loads(item)
-    if check_item_exists(item_json['ID']):
-        return create_error(303, 'Resource already exists.')
-    table.put_item(Item=item_json)
-    return response(code=201, body={'message': 'Resource created successfully.'})
 
 
 def update_item(item_id, item, called_by_daily=False):
@@ -66,13 +43,3 @@ def update_item(item_id, item, called_by_daily=False):
     item_json['ID'] = item_id
     table.put_item(Item=item_json)
     return response(code=201, body={'message': 'Resource updated successfully.'})
-
-
-def delete_item(item_id):
-    if item_id == DAILY_RESOURCE_NAME:
-        return create_error(400, 'Cannot delete daily quote.')
-    try:
-        table.delete_item(Key={'ID': item_id})
-    except:
-        return create_error(400, 'Bad request.')
-    return response(code=200, body={'message': 'Resource deleted successfully.'})
