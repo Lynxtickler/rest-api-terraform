@@ -7,10 +7,11 @@ resource "aws_api_gateway_resource" "this" {
 resource "aws_api_gateway_method" "this" {
   count = length(var.methods)
 
-  rest_api_id   = var.rest_api_id
-  resource_id   = aws_api_gateway_resource.this.id
-  http_method   = var.methods[count.index].method
-  authorization = "NONE"
+  rest_api_id      = var.rest_api_id
+  resource_id      = aws_api_gateway_resource.this.id
+  http_method      = var.methods[count.index].method
+  authorization    = "NONE"
+  api_key_required = lookup(var.methods[count.index], "api_key_required", false)
 }
 
 resource "aws_api_gateway_integration" "this" {
