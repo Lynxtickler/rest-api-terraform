@@ -7,7 +7,7 @@ module "archive" {
   name        = var.filename
 }
 
-resource "aws_s3_bucket_object" "this" {
+resource "aws_s3_object" "this" {
   bucket = var.bucket_id
   key    = "${var.filename}.zip"
   source = module.archive.output_path
@@ -17,8 +17,9 @@ resource "aws_s3_bucket_object" "this" {
 resource "aws_lambda_function" "this" {
   function_name = var.name
   s3_bucket     = var.bucket_id
-  s3_key        = aws_s3_bucket_object.this.key
+  s3_key        = aws_s3_object.this.key
 
+  architectures = ["arm64"]
   runtime = "python3.9"
   handler = "${var.filename}.lambda_handler"
 
