@@ -20,9 +20,10 @@ module "quotes_root" {
       code   = 200
     },
     {
-      method = "POST",
-      lambda = module.api_lambda[2].invoke_arn,
-      code   = 201
+      method           = "POST",
+      lambda           = module.api_lambda[2].invoke_arn,
+      code             = 201
+      api_key_required = true
     }
   ]
 }
@@ -40,14 +41,16 @@ module "quotes_sub" {
       code   = 200
     },
     {
-      method = "PUT",
-      lambda = module.api_lambda[4].invoke_arn,
-      code   = 201
+      method           = "PUT",
+      lambda           = module.api_lambda[4].invoke_arn,
+      code             = 201
+      api_key_required = true
     },
     {
-      method = "DELETE",
-      lambda = module.api_lambda[5].invoke_arn,
-      code   = 200
+      method           = "DELETE",
+      lambda           = module.api_lambda[5].invoke_arn,
+      code             = 200
+      api_key_required = true
     }
   ]
 }
@@ -73,7 +76,13 @@ resource "aws_api_gateway_deployment" "this" {
   rest_api_id = aws_api_gateway_rest_api.this.id
 
   triggers = {
-    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.this.body))
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_rest_api.this.body,
+      module.quotes_root.method_ids,
+      module.quotes_root.integration_ids,
+      module.quotes_sub.method_ids,
+      module.quotes_sub.integration_ids
+    ]))
   }
 
   lifecycle {

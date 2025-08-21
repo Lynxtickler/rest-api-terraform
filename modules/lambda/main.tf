@@ -20,8 +20,8 @@ resource "aws_lambda_function" "this" {
   s3_key        = aws_s3_object.this.key
 
   architectures = ["arm64"]
-  runtime = "python3.9"
-  handler = "${var.filename}.lambda_handler"
+  runtime       = "python3.9"
+  handler       = "${var.filename}.lambda_handler"
 
   source_code_hash = module.archive.hash
 
