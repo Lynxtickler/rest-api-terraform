@@ -53,7 +53,7 @@ jobs:
         run: terraform plan -out=plan.tfplan
 
       - name: Move Lambda sources into the artifact
-        run: mv functions/*.zip artifact
+        run: mv functions/*.zip artifacts
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
