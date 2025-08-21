@@ -52,3 +52,15 @@ variable "api_key_ssm_parameter" {
   type        = string
   default     = "/quotes-api/api-key"
 }
+
+variable "root_hosted_zone" {
+  description = "Root Route 53 Hosted Zone name."
+  type        = string
+  default     = "iikka.net"
+}
+
+variable "subdomain_path" {
+  description = "Subdomain path under the root Hosted Zone."
+  type        = string
+  default     = "quotes"
+}
