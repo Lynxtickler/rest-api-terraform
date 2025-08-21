@@ -85,7 +85,7 @@ jobs:
       - name: Download Terraform plan
         uses: actions/download-artifact@v4
         with:
-          name: tfplan
+          name: artifacts
           path: artifacts
 
       - name: Move Lambda source files
