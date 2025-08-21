@@ -90,5 +90,5 @@ jobs:
       - name: Terraform init
         run: terraform init
 
-      # - name: Apply Terraform plan
-      #   run: terraform apply -auto-approve artifacts/plan.tfplan
+      - name: Apply Terraform plan
+        run: terraform apply -auto-approve artifacts/plan.tfplan
