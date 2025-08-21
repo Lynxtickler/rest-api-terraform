@@ -46,13 +46,19 @@ jobs:
       - name: Terraform validate
         run: terraform validate
 
+      - name: Create artifact directory
+        run: mkdir artifacts
+
       - name: Terraform plan
         run: terraform plan -out=plan.tfplan
 
-      - name: Upload Terraform plan
+      - name: Move Lambda sources into the artifact
+        run: mv functions/*.zip artifact
+
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: tfplan
+          name: artifacts
           path: plan.tfplan
 
   terraform-apply:
@@ -81,6 +87,11 @@ jobs:
         with:
           name: tfplan
           path: artifacts
+
+      - name: Move Lambda source files
+        run: |
+          mkdir functions
+          mv artifacts/*.zip functions
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
