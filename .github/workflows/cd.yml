@@ -80,10 +80,12 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
 
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: artifacts
           path: artifacts
+
+      - run: ls -R
 
       - name: Move Lambda source files
         run: |
