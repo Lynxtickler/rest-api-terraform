@@ -50,7 +50,7 @@ jobs:
         run: mkdir artifacts
 
       - name: Terraform plan
-        run: terraform plan -out=plan.tfplan
+        run: terraform plan -out=artifacts/plan.tfplan
 
       - name: Move Lambda sources into the artifact
         run: mv functions/*.zip artifacts
@@ -59,7 +59,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: artifacts
-          path: plan.tfplan
+          path: artifacts
 
   terraform-apply:
     name: "Apply Terraform plan"
