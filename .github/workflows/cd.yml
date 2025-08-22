@@ -1,0 +1,104 @@
+name: "CI/CD"
+
+on: push
+env:
+  TERRAFORM_WORKSPACE: default
+
+jobs:
+  terraform-plan:
+    name: "Validate & run Terraform plan"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    permissions:
+      contents: read
+    outputs:
+      terraform-version: ${{ steps.terraform-version.outputs.terraform }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Get Terraform version
+        uses: dflook/terraform-version@v2
+        id: terraform-version
+        with:
+          workspace: ${{ env.TERRAFORM_WORKSPACE }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ steps.terraform-version.outputs.terraform }}
+
+      - name: Terraform format
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        run: terraform init
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Create artifact directory
+        run: mkdir artifacts
+
+      - name: Terraform plan
+        run: terraform plan -out=artifacts/plan.tfplan
+
+      - name: Move Lambda sources into the artifact
+        run: mv functions/*.zip artifacts
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts
+          path: artifacts
+
+  terraform-apply:
+    name: "Apply Terraform plan"
+    needs: terraform-plan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    permissions:
+      contents: read
+      deployments: write
+    environment: prod
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: artifacts
+          path: artifacts
+
+      - name: Move Lambda source files
+        run: mv artifacts/*.zip functions
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ needs.terraform-plan.outputs.terraform-version }}
+
+      - name: Terraform init
+        run: terraform init
+
+      - name: Apply Terraform plan
+        run: terraform apply -auto-approve artifacts/plan.tfplan
