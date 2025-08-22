@@ -69,9 +69,13 @@ jobs:
       run:
         shell: bash
     permissions:
+      contents: read
       deployments: write
     environment: prod
     steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -88,9 +92,7 @@ jobs:
       - run: ls -R
 
       - name: Move Lambda source files
-        run: |
-          mkdir functions
-          mv artifacts/*.zip functions
+        run: mv artifacts/*.zip functions
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
