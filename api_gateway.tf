@@ -12,7 +12,7 @@ module "quotes_root" {
 
   rest_api_id        = aws_api_gateway_rest_api.this.id
   parent_resource_id = aws_api_gateway_rest_api.this.root_resource_id
-  endpoint           = ""
+  endpoint           = "v1"
   methods = [
     {
       method = "GET",
