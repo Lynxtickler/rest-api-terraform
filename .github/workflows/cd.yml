@@ -1,6 +1,9 @@
 name: "CI/CD"
 
-on: push
+on:
+  push:
+  workflow-dispatch:
+
 env:
   TERRAFORM_WORKSPACE: default
 
