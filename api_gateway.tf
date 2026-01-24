@@ -12,7 +12,7 @@ module "quotes_root" {
 
   rest_api_id        = aws_api_gateway_rest_api.this.id
   parent_resource_id = aws_api_gateway_rest_api.this.root_resource_id
-  endpoint           = "quotes"
+  endpoint           = "v1"
   methods = [
     {
       method = "GET",
@@ -77,11 +77,10 @@ resource "aws_api_gateway_deployment" "this" {
 
   triggers = {
     redeployment = sha1(jsonencode([
-      aws_api_gateway_rest_api.this.body,
-      module.quotes_root.method_ids,
-      module.quotes_root.integration_ids,
-      module.quotes_sub.method_ids,
-      module.quotes_sub.integration_ids
+      aws_api_gateway_rest_api.this,
+      module.quotes_root,
+      module.quotes_sub,
+      module.any
     ]))
   }
 
