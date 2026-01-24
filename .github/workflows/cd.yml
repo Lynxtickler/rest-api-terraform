@@ -1,6 +1,20 @@
 name: "CI/CD"
 
-on: push
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: Run deploy job
+        required: true
+        default: no
+        type: choice
+        options:
+          - no
+          - yes
+
 env:
   TERRAFORM_WORKSPACE: default
 
@@ -64,6 +78,7 @@ jobs:
   terraform-apply:
     name: "Apply Terraform plan"
     needs: terraform-plan
+    if: ${{ github.event_name == 'push' || inputs.deploy == 'yes' }}
     runs-on: ubuntu-latest
     defaults:
       run:
