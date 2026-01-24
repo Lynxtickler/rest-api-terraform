@@ -9,11 +9,11 @@ on:
       deploy:
         description: Run deploy job
         required: true
-        default: no
+        default: "no"
         type: choice
         options:
-          - no
-          - yes
+          - "no"
+          - "yes"
 
 env:
   TERRAFORM_WORKSPACE: default
